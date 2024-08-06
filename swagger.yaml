@@ -1,0 +1,790 @@
+swagger: '2.0'
+info:
+  title: Product API
+  description: Description
+  version: 1.0.0
+host: assignment4-muchamad-syariful-umam.onrender.com
+basePath: /api/v1
+schemes:
+  - http
+  - https
+securityDefinitions:
+  Bearer:
+    type: apiKey
+    name: Authorization
+    in: header
+    description: 'Bearer token for API authentication'
+paths:
+  /register:
+    post:
+      description: ''
+      parameters:
+        - in: body
+          name: body
+          description: User credentials
+          required: true
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+                example: 'admin'
+              email:
+                type: string
+                example: 'admin@gmail.com'
+              password:
+                type: string
+                example: 'password'
+              confirmationPassword:
+                type: string
+                example: 'password'
+            required:
+              - name
+              - email
+              - password
+              - confirmationPassword
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+              message:
+                type: string
+              data:
+                type: string
+              transaction_id:
+                type: string
+          examples:
+            application/json:
+              status: '00000'
+              message: Success
+              data: User admin@gmail.com has been registered
+              transaction_id: A3022407260238591280
+        '400':
+          description: Bad Request - The request parameters are invalid
+          schema:
+            type: object
+            properties:
+              status:
+                type: integer
+              message:
+                type: string
+              error:
+                type: string
+              transaction_id:
+                type: string
+          examples:
+            application/json:
+              status: 400
+              message: '"name" is required'
+              error: Bad Request
+              transaction_id: A3022407260242395440
+        '409':
+          description: Conflict - Username already exist
+          schema:
+            type: object
+            properties:
+              status:
+                type: integer
+              message:
+                type: string
+              error:
+                type: string
+              transaction_id:
+                type: string
+          examples:
+            application/json:
+              status: 409
+              message: User with email admin99@gmail.com already exists
+              error: Conflict
+              transaction_id: A3022407260245249800
+        '500':
+          description: Error - Internal Server Error
+          schema:
+            type: object
+            properties:
+              status:
+                type: integer
+              message:
+                type: string
+              error:
+                type: string
+              transaction_id:
+                type: string
+          examples:
+            application/json:
+              status: 500
+              message: An internal server error occurred
+              error: Internal Server Error
+              transaction_id: A3022407251010424070
+  /login:
+    post:
+      description: ''
+      parameters:
+        - in: body
+          name: body
+          description: User credentials
+          required: true
+          schema:
+            type: object
+            properties:
+              email:
+                type: string
+                example: 'admin@gmail.com'
+              password:
+                type: string
+                example: 'password'
+            required:
+              - email
+              - password
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+              message:
+                type: string
+              data:
+                type: string
+              transaction_id:
+                type: string
+          examples:
+            application/json:
+              status: '00000'
+              message: Success
+              data: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwibmFtZSI6ImFkbWluIiwidXNlckVtYWlsIjoiYWRtaW5AZ21haWwuY29tIiwiaWF0IjoxNzIxOTYyMzY5LCJleHAiOjE3MjE5NjIzODl9.jdSShwY9mIbszWk02YkLgcgbvf0Gfje8j6XJdy6waFg
+              transaction_id: A3022407260252478610
+        '400':
+          description: Bad Request - The request parameters are invalid
+          schema:
+            type: object
+            properties:
+              status:
+                type: integer
+              message:
+                type: string
+              error:
+                type: string
+              transaction_id:
+                type: string
+          examples:
+            application/json:
+              status: 400
+              message: '"email" is not allowed to be empty'
+              error: Bad Request
+              transaction_id: A3022407260254019610
+        '404':
+          description: Not Found - Users with this email not found
+          schema:
+            type: object
+            properties:
+              status:
+                type: integer
+              message:
+                type: string
+              error:
+                type: string
+              transaction_id:
+                type: string
+          examples:
+            application/json:
+              status: 404
+              message: User with email 1admin@gmail.com not found
+              error: Not Found
+              transaction_id: A3022407260959163400
+        '401':
+          description: Not Found - Users with this email not found
+          schema:
+            type: object
+            properties:
+              status:
+                type: integer
+              message:
+                type: string
+              error:
+                type: string
+              transaction_id:
+                type: string
+          examples:
+            application/json:
+              status: 401
+              message: Invalid email or password
+              error: Unauthorized
+              transaction_id: A3022407261009497180
+        '500':
+          description: Error - Internal Server Error
+          schema:
+            type: object
+            properties:
+              status:
+                type: integer
+              message:
+                type: string
+              error:
+                type: string
+              transaction_id:
+                type: string
+          examples:
+            application/json:
+              status: 500
+              message: An internal server error occurred
+              error: Internal Server Error
+              transaction_id: A3022407251010424070
+  /product:
+    get:
+      tags:
+        - Product
+      description: ''
+      security:
+        - Bearer: []
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+              message:
+                type: string
+              data:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                  list:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                        brand:
+                          type: string
+                        price:
+                          type: integer
+                        stock:
+                          type: integer
+              transaction_id:
+                type: string
+          examples:
+            application/json:
+              status: '00000'
+              message: Success
+              data:
+                count: 2
+                list:
+                  - name: Velocity White
+                    brand: Compass
+                    price: 198000
+                    stock: 15
+                  - name: Velocity Black
+                    brand: Compass
+                    price: 598000
+                    stock: 15
+              transaction_id: A3022407261017392020
+        '403':
+          description: Forbidden - invalid token
+          schema:
+            type: object
+            properties:
+              status:
+                type: integer
+              message:
+                type: string
+              error:
+                type: string
+          examples:
+            application/json:
+              status: 403
+              message: Forbidden
+              error: Forbidden
+        '500':
+          description: Error - Internal Server Error
+          schema:
+            type: object
+            properties:
+              status:
+                type: integer
+              message:
+                type: string
+              error:
+                type: string
+              transaction_id:
+                type: string
+          examples:
+            application/json:
+              status: 500
+              message: An internal server error occurred
+              error: Internal Server Error
+              transaction_id: A3022407251010424070
+    post:
+      tags:
+        - Product
+      description: ''
+      security:
+        - Bearer: []
+      parameters:
+        - name: body
+          in: body
+          description: 'Add Product'
+          required: true
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+                example: Velocity White
+              brand:
+                type: string
+                example: Compass
+              price:
+                type: string
+                example: 198000
+              stock:
+                type: integer
+                example: 10
+      responses:
+        '200':
+          description: Successful response - Operation completed successfully
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+                example: '00000'
+              message:
+                type: string
+                example: 'Success'
+              data:
+                type: string
+                example: "Added 'Velocity ABC' , 'Compass' , '198000' , '10' to product"
+              transaction_id:
+                type: string
+                example: 'A3022407261017188290'
+          examples:
+            application/json:
+              value:
+                status: '00000'
+                message: 'Success'
+                data: "Added 'Velocity ABC' , 'Compass' , '198000' , '10' to product"
+                transaction_id: 'A3022407261017188290'
+        '403':
+          description: Forbidden - invalid token
+          schema:
+            type: object
+            properties:
+              status:
+                type: integer
+              message:
+                type: string
+              error:
+                type: string
+          examples:
+            application/json:
+              status: 403
+              message: Forbidden
+              error: Forbidden
+        '400':
+          description: Bad Request - The request parameters are invalid
+          schema:
+            type: object
+            properties:
+              status:
+                type: integer
+              message:
+                type: string
+              error:
+                type: string
+              transaction_id:
+                type: string
+          examples:
+            application/json:
+              status: 400
+              message: '"name" is not allowed to be empty'
+              error: Bad Request
+              transaction_id: A3022407260254019610
+        '500':
+          description: Error - Internal Server Error
+          schema:
+            type: object
+            properties:
+              status:
+                type: integer
+              message:
+                type: string
+              error:
+                type: string
+              transaction_id:
+                type: string
+          examples:
+            application/json:
+              status: 500
+              message: An internal server error occurred
+              error: Internal Server Error
+              transaction_id: A3022407251010424070
+  /produuct/{id}:
+    get:
+      tags:
+        - Product
+      description: ''
+      security:
+        - Bearer: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: integer
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+              message:
+                type: string
+              data:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                  list:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                        brand:
+                          type: string
+                        price:
+                          type: integer
+                        stock:
+                          type: integer
+              transaction_id:
+                type: string
+          examples:
+            application/json:
+              status: '00000'
+              message: Success
+              data:
+                count: 1
+                list:
+                  - name: Velocity White
+                    brand: Compass
+                    price: 198000
+                    stock: 15
+              transaction_id: A3022407261017392020
+        '403':
+          description: Forbidden - invalid token
+          schema:
+            type: object
+            properties:
+              status:
+                type: integer
+              message:
+                type: string
+              error:
+                type: string
+          examples:
+            application/json:
+              status: 403
+              message: Forbidden
+              error: Forbidden
+        '400':
+          description: Bad Request - The request parameters are invalid
+          schema:
+            type: object
+            properties:
+              status:
+                type: integer
+              message:
+                type: string
+              error:
+                type: string
+              transaction_id:
+                type: string
+          examples:
+            application/json:
+              status: 400
+              message: '"id" must be a number'
+              error: Bad Request
+              transaction_id: A3022407260254019610
+        '404':
+          description: Not Found - Product not found
+          schema:
+            type: object
+            properties:
+              status:
+                type: integer
+              message:
+                type: string
+              error:
+                type: string
+              transaction_id:
+                type: string
+          examples:
+            application/json:
+              status: 404
+              message: Product with id 99 not found
+              error: Not Found
+              transaction_id: A3022407261048041580
+        '500':
+          description: Error - Internal Server Error
+          schema:
+            type: object
+            properties:
+              status:
+                type: integer
+              message:
+                type: string
+              error:
+                type: string
+              transaction_id:
+                type: string
+          examples:
+            application/json:
+              status: 500
+              message: An internal server error occurred
+              error: Internal Server Error
+              transaction_id: A3022407251010424070
+    put:
+      tags:
+        - Product
+      description: ''
+      security:
+        - Bearer: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: integer
+        - name: body
+          in: body
+          description: 'Edit Product'
+          required: true
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+                example: Velocity Black
+              brand:
+                type: string
+                example: Compass
+              price:
+                type: string
+                example: 198000
+              stock:
+                type: integer
+                example: 10
+      responses:
+        '200':
+          description: Successful response - Operation completed successfully
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+                example: '00000'
+              message:
+                type: string
+                example: 'Success'
+              data:
+                type: string
+                example: "Edited 'Velocity ABC' , 'Compass' , '198000' , '10' to product"
+              transaction_id:
+                type: string
+                example: 'A3022407261017188290'
+          examples:
+            application/json:
+              value:
+                status: '00000'
+                message: 'Success'
+                data: "Edited 'Velocity ABC' , 'Compass' , '198000' , '10' to product"
+                transaction_id: 'A3022407261017188290'
+        '403':
+          description: Forbidden - invalid token
+          schema:
+            type: object
+            properties:
+              status:
+                type: integer
+              message:
+                type: string
+              error:
+                type: string
+          examples:
+            application/json:
+              status: 403
+              message: Forbidden
+              error: Forbidden
+        '400':
+          description: Bad Request - The request parameters are invalid
+          schema:
+            type: object
+            properties:
+              status:
+                type: integer
+              message:
+                type: string
+              error:
+                type: string
+              transaction_id:
+                type: string
+          examples:
+            application/json:
+              status: 400
+              message: '"name" is not allowed to be empty'
+              error: Bad Request
+              transaction_id: A3022407260254019610
+        '404':
+          description: Not Found - Product not found
+          schema:
+            type: object
+            properties:
+              status:
+                type: integer
+              message:
+                type: string
+              error:
+                type: string
+              transaction_id:
+                type: string
+          examples:
+            application/json:
+              status: 404
+              message: Product with id 99 not found
+              error: Not Found
+              transaction_id: A3022407261048041580
+        '500':
+          description: Error - Internal Server Error
+          schema:
+            type: object
+            properties:
+              status:
+                type: integer
+              message:
+                type: string
+              error:
+                type: string
+              transaction_id:
+                type: string
+          examples:
+            application/json:
+              status: 500
+              message: An internal server error occurred
+              error: Internal Server Error
+              transaction_id: A3022407251010424070
+    delete:
+      tags:
+        - Product
+      description: ''
+      security:
+        - Bearer: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          type: integer
+      responses:
+        '200':
+          description: OK
+          schema:
+            type: object
+            properties:
+              status:
+                type: string
+              message:
+                type: string
+              data:
+                type: string
+              transaction_id:
+                type: string
+          examples:
+            application/json:
+              status: '00000'
+              message: Success
+              data: Delete id 1 successfully
+              transaction_id: A3022407261017392020
+        '403':
+          description: Forbidden - invalid token
+          schema:
+            type: object
+            properties:
+              status:
+                type: integer
+              message:
+                type: string
+              error:
+                type: string
+          examples:
+            application/json:
+              status: 403
+              message: Forbidden
+              error: Forbidden
+        '400':
+          description: Bad Request - The request parameters are invalid
+          schema:
+            type: object
+            properties:
+              status:
+                type: integer
+              message:
+                type: string
+              error:
+                type: string
+              transaction_id:
+                type: string
+          examples:
+            application/json:
+              status: 400
+              message: '"id" must be a number'
+              error: Bad Request
+              transaction_id: A3022407260254019610
+        '404':
+          description: Not Found - Product not found
+          schema:
+            type: object
+            properties:
+              status:
+                type: integer
+              message:
+                type: string
+              error:
+                type: string
+              transaction_id:
+                type: string
+          examples:
+            application/json:
+              status: 404
+              message: Product with id 99 not found
+              error: Not Found
+              transaction_id: A3022407261048041580
+        '500':
+          description: Error - Internal Server Error
+          schema:
+            type: object
+            properties:
+              status:
+                type: integer
+              message:
+                type: string
+              error:
+                type: string
+              transaction_id:
+                type: string
+          examples:
+            application/json:
+              status: 500
+              message: An internal server error occurred
+              error: Internal Server Error
+              transaction_id: A3022407251010424070
